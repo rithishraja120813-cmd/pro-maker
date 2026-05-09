@@ -1,177 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Pro Maker Running Game</title>
+<title>Pro Maker</title>
 
 <style>
-
 body{
-margin:0;
-overflow:hidden;
+background:black;
+color:white;
 font-family:Arial;
-background:#222;
-}
-
-#game{
-width:100%;
-height:100vh;
-position:relative;
-background:skyblue;
-overflow:hidden;
-}
-
-#title{
-position:absolute;
-top:10px;
-width:100%;
 text-align:center;
-font-size:40px;
+padding:50px;
+}
+
+h1{
 color:gold;
-font-weight:bold;
-}
-
-#road{
-position:absolute;
-bottom:0;
-width:100%;
-height:200px;
-background:#333;
-}
-
-#thief{
-position:absolute;
-bottom:200px;
-left:100px;
-font-size:70px;
-}
-
-#police{
-position:absolute;
-bottom:200px;
-left:20px;
-font-size:70px;
-}
-
-#obstacle{
-position:absolute;
-bottom:190px;
-right:-100px;
-font-size:80px;
-animation:move 2s linear infinite;
-}
-
-@keyframes move{
-
-0%{
-right:-100px;
-}
-
-100%{
-right:110%;
-}
-
+font-size:60px;
 }
 
 button{
-position:absolute;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-padding:20px;
-font-size:30px;
-border:none;
-border-radius:50%;
 background:gold;
+border:none;
+padding:15px 30px;
+border-radius:15px;
+font-size:20px;
+margin-top:20px;
 }
-
 </style>
+
 </head>
 
 <body>
 
-<div id="game">
+<h1>PRO MAKER</h1>
 
-<div id="title">
-🔥 PRO MAKER RUNNING GAME 🔥
-</div>
+<p>Welcome to Pro Maker Social Media</p>
 
-<div id="police">👮</div>
+<button>Upload Video</button>
 
-<div id="thief">🕵️</div>
+</body>
+</html> 
+<iframe
+width="300"
+height="500"
+src="https://player.cloudinary.com/embed/?cloud_name=dmi78t9dt&public_id=A_boy_eating_an_apple_pqo8oy"
+allow="autoplay; fullscreen"
+allowfullscreen>
+</iframe > 
 
-<div id="obstacle">🚌</div>
 
-<div id="road"></div>
-
-<button onclick="jump()">⬆️</button>
-
-</div>
-
-<script>
-
-const thief =
-document.getElementById("thief");
-
-let jumping = false;
-
-function jump(){
-
-if(jumping) return;
-
-jumping = true;
-
-let up = 0;
-
-let jumpUp = setInterval(()=>{
-
-if(up >= 150){
-
-clearInterval(jumpUp);
-
-let down = setInterval(()=>{
-
-if(up <= 0){
-
-clearInterval(down);
-
-jumping = false;
-
-}
-
-up -= 5;
-
-thief.style.bottom =
-200 + up + "px";
-
-},20);
-
-}
-
-up += 5;
-
-thief.style.bottom =
-200 + up + "px";
-
-},20);
-
-}
-
-document.addEventListener(
-"keydown",
-function(e){
-
-if(
-e.code==="Space" ||
-e.code==="ArrowUp"
-){
-
-jump();
-
-}
-
-});
-
-</script>
 
 </body>
 </html>
