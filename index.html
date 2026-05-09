@@ -46,343 +46,316 @@ src="https://player.cloudinary.com/embed/?cloud_name=dmi78t9dt&public_id=A_boy_e
 allow="autoplay; fullscreen"
 allowfullscreen>
 </iframe>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>PRO MAKER - Police Chase Game</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pro Maker Runner Game</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+    body {
+      overflow: hidden;
+      background: linear-gradient(to bottom, #87CEEB, #ffffff);
+    }
 
-body{
-overflow:hidden;
-font-family:Arial;
-background:black;
-}
+    #game {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #87ceeb;
+    }
 
-#game{
-width:100%;
-height:100vh;
-position:relative;
-overflow:hidden;
-background:linear-gradient(#4facfe,#ffffff);
-}
+    .road {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #444;
+      overflow: hidden;
+    }
 
-#title{
-position:absolute;
-top:10px;
-width:100%;
-text-align:center;
-font-size:40px;
-font-weight:bold;
-color:gold;
-text-shadow:2px 2px 10px black;
-z-index:10;
-}
+    .line {
+      position: absolute;
+      width: 10px;
+      height: 80px;
+      background: white;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: moveLine 1s linear infinite;
+    }
 
-#score{
-position:absolute;
-top:70px;
-left:20px;
-font-size:30px;
-color:white;
-z-index:10;
-}
+    @keyframes moveLine {
+      from {
+        top: -100px;
+      }
+      to {
+        top: 100vh;
+      }
+    }
 
-#road{
-position:absolute;
-bottom:0;
-width:100%;
-height:220px;
-background:#333;
-}
+    .player {
+      position: absolute;
+      width: 70px;
+      height: 100px;
+      bottom: 100px;
+      left: 45%;
+      background: gold;
+      border-radius: 15px;
+      border: 4px solid black;
+      text-align: center;
+      line-height: 100px;
+      font-weight: bold;
+      font-size: 20px;
+      color: black;
+      z-index: 10;
+    }
 
-.line{
-position:absolute;
-width:120px;
-height:15px;
-background:white;
-animation:roadMove 1s linear infinite;
-}
+    .police {
+      position: absolute;
+      width: 70px;
+      height: 100px;
+      bottom: -20px;
+      left: 45%;
+      background: blue;
+      border-radius: 15px;
+      border: 4px solid white;
+      text-align: center;
+      line-height: 100px;
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+      z-index: 5;
+    }
 
-.line:nth-child(1){left:5%; top:100px;}
-.line:nth-child(2){left:25%; top:100px;}
-.line:nth-child(3){left:45%; top:100px;}
-.line:nth-child(4){left:65%; top:100px;}
-.line:nth-child(5){left:85%; top:100px;}
+    .obstacle {
+      position: absolute;
+      width: 80px;
+      height: 130px;
+      top: -150px;
+      border-radius: 10px;
+      border: 3px solid black;
+    }
 
-@keyframes roadMove{
-0%{transform:translateX(0);}
-100%{transform:translateX(-200px);}
-}
+    .car {
+      background: red;
+    }
 
-#thief{
-position:absolute;
-width:70px;
-height:90px;
-background:gold;
-bottom:130px;
-left:120px;
-border-radius:15px;
-box-shadow:0 0 20px gold;
-}
+    .bus {
+      background: orange;
+      width: 100px;
+      height: 180px;
+    }
 
-#thief::before{
-content:'🕵️';
-font-size:55px;
-position:absolute;
-left:5px;
-top:5px;
-}
+    #score {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 30px;
+      color: white;
+      background: rgba(0,0,0,0.6);
+      padding: 10px 20px;
+      border-radius: 10px;
+      z-index: 20;
+    }
 
-#police{
-position:absolute;
-width:70px;
-height:90px;
-background:blue;
-bottom:130px;
-left:20px;
-border-radius:15px;
-box-shadow:0 0 20px cyan;
-}
+    #gameOver {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      z-index: 100;
+    }
 
-#police::before{
-content:'👮';
-font-size:55px;
-position:absolute;
-left:5px;
-top:5px;
-}
+    #gameOver h1 {
+      font-size: 60px;
+      color: gold;
+      margin-bottom: 20px;
+    }
 
-.obstacle{
-position:absolute;
-width:90px;
-height:90px;
-right:-120px;
-bottom:120px;
-font-size:70px;
-animation:moveObstacle 3s linear infinite;
-}
+    #restartBtn {
+      padding: 15px 40px;
+      border: none;
+      background: gold;
+      font-size: 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-@keyframes moveObstacle{
-0%{
-right:-150px;
-}
-100%{
-right:120%;
-}
-}
+    #title {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: black;
+      color: gold;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 28px;
+      font-weight: bold;
+      z-index: 20;
+    }
 
-#gameOver{
-display:none;
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:black;
-padding:40px;
-border-radius:20px;
-text-align:center;
-color:white;
-z-index:20;
-box-shadow:0 0 30px gold;
-}
-
-#gameOver h2{
-font-size:50px;
-margin-bottom:20px;
-color:red;
-}
-
-#restart{
-padding:15px 30px;
-font-size:20px;
-background:gold;
-border:none;
-border-radius:15px;
-cursor:pointer;
-font-weight:bold;
-}
-
-#controls{
-position:absolute;
-bottom:20px;
-width:100%;
-text-align:center;
-z-index:20;
-}
-
-.controlBtn{
-width:80px;
-height:80px;
-border:none;
-margin:10px;
-font-size:35px;
-border-radius:50%;
-background:gold;
-}
-
-</style>
+  </style>
 </head>
-
 <body>
 
 <div id="game">
+  <div class="road" id="road"></div>
 
-<div id="title">🔥 PRO MAKER POLICE CHASE 🔥</div>
+  <div id="score">Score: 0</div>
+  <div id="title">PRO MAKER</div>
 
-<div id="score">Score: 0</div>
+  <div class="player" id="player">THIEF</div>
+  <div class="police">POLICE</div>
 
-<div id="road">
-<div class="line"></div>
-<div class="line"></div>
-<div class="line"></div>
-<div class="line"></div>
-<div class="line"></div>
-</div>
-
-<div id="police"></div>
-<div id="thief"></div>
-
-<div class="obstacle" id="obstacle">🚌</div>
-
-<div id="gameOver">
-<h2>GAME OVER</h2>
-<p>Police Caught the Thief!</p>
-<br>
-<button id="restart" onclick="restartGame()">
-Restart Game
-</button>
-</div>
-
-<div id="controls">
-<button class="controlBtn" onclick="jump()">⬆️</button>
-</div>
-
+  <div id="gameOver">
+    <h1>Game Over</h1>
+    <p id="finalScore"></p>
+    <br>
+    <button id="restartBtn">Restart</button>
+  </div>
 </div>
 
 <script>
 
-const thief = document.getElementById("thief");
-const obstacle = document.getElementById("obstacle");
-const scoreText = document.getElementById("score");
-const gameOver = document.getElementById("gameOver");
+const game = document.getElementById('game');
+const player = document.getElementById('player');
+const scoreText = document.getElementById('score');
+const gameOver = document.getElementById('gameOver');
+const finalScore = document.getElementById('finalScore');
+const restartBtn = document.getElementById('restartBtn');
+const road = document.getElementById('road');
 
-let jumping = false;
+let playerX = window.innerWidth / 2 - 35;
 let score = 0;
+let speed = 8;
 let gameRunning = true;
 
-const obstacles = ["🚌","🚗","🚕","🚚"];
+player.style.left = playerX + 'px';
 
-setInterval(()=>{
-let randomObstacle =
-obstacles[Math.floor(Math.random()*obstacles.length)];
-
-obstacle.innerHTML = randomObstacle;
-},2500);
-
-function jump(){
-
-if(jumping) return;
-
-jumping = true;
-
-let up = 0;
-
-let jumpUp = setInterval(()=>{
-
-if(up >= 200){
-
-clearInterval(jumpUp);
-
-let down = setInterval(()=>{
-
-if(up <= 0){
-clearInterval(down);
-jumping = false;
+// Create road lines
+for(let i=0; i<10; i++) {
+  const line = document.createElement('div');
+  line.classList.add('line');
+  line.style.top = (i * 120) + 'px';
+  line.style.animationDelay = (i * 0.1) + 's';
+  road.appendChild(line);
 }
 
-up -= 7;
+// Move player
+window.addEventListener('keydown', (e) => {
+  if(!gameRunning) return;
 
-thief.style.bottom =
-130 + up + "px";
+  if(e.key === 'ArrowLeft' || e.key === 'a') {
+    playerX -= 30;
+  }
 
-},20);
+  if(e.key === 'ArrowRight' || e.key === 'd') {
+    playerX += 30;
+  }
 
-}
+  if(playerX < 0) playerX = 0;
+  if(playerX > window.innerWidth - 70) playerX = window.innerWidth - 70;
 
-up += 7;
-
-thief.style.bottom =
-130 + up + "px";
-
-},20);
-
-}
-
-// Keyboard Control
-
-document.addEventListener("keydown",function(e){
-
-if(e.code === "Space" || e.code === "ArrowUp"){
-jump();
-}
-
+  player.style.left = playerX + 'px';
 });
 
-// Score
+// Mobile touch control
+window.addEventListener('touchmove', (e) => {
+  let touchX = e.touches[0].clientX;
+  playerX = touchX - 35;
 
-let scoreInterval = setInterval(()=>{
+  if(playerX < 0) playerX = 0;
+  if(playerX > window.innerWidth - 70) playerX = window.innerWidth - 70;
 
-if(gameRunning){
-score++;
-scoreText.innerHTML = "Score: " + score;
+  player.style.left = playerX + 'px';
+});
+
+// Create obstacles
+function createObstacle() {
+  if(!gameRunning) return;
+
+  const obstacle = document.createElement('div');
+
+  let type = Math.random() > 0.5 ? 'car' : 'bus';
+
+  obstacle.classList.add('obstacle');
+  obstacle.classList.add(type);
+
+  obstacle.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+
+  game.appendChild(obstacle);
+
+  let obstacleY = -200;
+
+  function moveObstacle() {
+    if(!gameRunning) return;
+
+    obstacleY += speed;
+    obstacle.style.top = obstacleY + 'px';
+
+    // Collision
+    const playerRect = player.getBoundingClientRect();
+    const obstacleRect = obstacle.getBoundingClientRect();
+
+    if(
+      playerRect.left < obstacleRect.right &&
+      playerRect.right > obstacleRect.left &&
+      playerRect.top < obstacleRect.bottom &&
+      playerRect.bottom > obstacleRect.top
+    ) {
+      endGame();
+    }
+
+    if(obstacleY > window.innerHeight) {
+      obstacle.remove();
+      score++;
+      scoreText.innerText = 'Score: ' + score;
+
+      if(score % 5 === 0) {
+        speed += 1;
+      }
+    } else {
+      requestAnimationFrame(moveObstacle);
+    }
+  }
+
+  moveObstacle();
 }
 
-},100);
+// Generate obstacles continuously
+let obstacleInterval = setInterval(() => {
+  createObstacle();
+}, 1200);
 
-// Collision Detection
+// End Game
+function endGame() {
+  gameRunning = false;
+  clearInterval(obstacleInterval);
 
-let collision = setInterval(()=>{
-
-let thiefBottom = parseInt(
-window.getComputedStyle(thief)
-.getPropertyValue("bottom")
-);
-
-let obstacleRight = parseInt(
-window.getComputedStyle(obstacle)
-.getPropertyValue("right")
-);
-
-if(
-obstacleRight > window.innerWidth-240 &&
-obstacleRight < window.innerWidth-120 &&
-thiefBottom < 220
-){
-
-gameRunning = false;
-
-obstacle.style.animation = "none";
-
-gameOver.style.display = "block";
-
-clearInterval(scoreInterval);
-
+  gameOver.style.display = 'flex';
+  finalScore.innerText = 'Your Score: ' + score;
 }
 
-},10);
-
-function restartGame(){
-location.reload();
-}
+// Restart
+restartBtn.addEventListener('click', () => {
+  location.reload();
+});
 
 </script>
 
 </body>
-  </html>
+</html>
+
