@@ -46,3 +46,343 @@ src="https://player.cloudinary.com/embed/?cloud_name=dmi78t9dt&public_id=A_boy_e
 allow="autoplay; fullscreen"
 allowfullscreen>
 </iframe>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>PRO MAKER - Police Chase Game</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+overflow:hidden;
+font-family:Arial;
+background:black;
+}
+
+#game{
+width:100%;
+height:100vh;
+position:relative;
+overflow:hidden;
+background:linear-gradient(#4facfe,#ffffff);
+}
+
+#title{
+position:absolute;
+top:10px;
+width:100%;
+text-align:center;
+font-size:40px;
+font-weight:bold;
+color:gold;
+text-shadow:2px 2px 10px black;
+z-index:10;
+}
+
+#score{
+position:absolute;
+top:70px;
+left:20px;
+font-size:30px;
+color:white;
+z-index:10;
+}
+
+#road{
+position:absolute;
+bottom:0;
+width:100%;
+height:220px;
+background:#333;
+}
+
+.line{
+position:absolute;
+width:120px;
+height:15px;
+background:white;
+animation:roadMove 1s linear infinite;
+}
+
+.line:nth-child(1){left:5%; top:100px;}
+.line:nth-child(2){left:25%; top:100px;}
+.line:nth-child(3){left:45%; top:100px;}
+.line:nth-child(4){left:65%; top:100px;}
+.line:nth-child(5){left:85%; top:100px;}
+
+@keyframes roadMove{
+0%{transform:translateX(0);}
+100%{transform:translateX(-200px);}
+}
+
+#thief{
+position:absolute;
+width:70px;
+height:90px;
+background:gold;
+bottom:130px;
+left:120px;
+border-radius:15px;
+box-shadow:0 0 20px gold;
+}
+
+#thief::before{
+content:'🕵️';
+font-size:55px;
+position:absolute;
+left:5px;
+top:5px;
+}
+
+#police{
+position:absolute;
+width:70px;
+height:90px;
+background:blue;
+bottom:130px;
+left:20px;
+border-radius:15px;
+box-shadow:0 0 20px cyan;
+}
+
+#police::before{
+content:'👮';
+font-size:55px;
+position:absolute;
+left:5px;
+top:5px;
+}
+
+.obstacle{
+position:absolute;
+width:90px;
+height:90px;
+right:-120px;
+bottom:120px;
+font-size:70px;
+animation:moveObstacle 3s linear infinite;
+}
+
+@keyframes moveObstacle{
+0%{
+right:-150px;
+}
+100%{
+right:120%;
+}
+}
+
+#gameOver{
+display:none;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:black;
+padding:40px;
+border-radius:20px;
+text-align:center;
+color:white;
+z-index:20;
+box-shadow:0 0 30px gold;
+}
+
+#gameOver h2{
+font-size:50px;
+margin-bottom:20px;
+color:red;
+}
+
+#restart{
+padding:15px 30px;
+font-size:20px;
+background:gold;
+border:none;
+border-radius:15px;
+cursor:pointer;
+font-weight:bold;
+}
+
+#controls{
+position:absolute;
+bottom:20px;
+width:100%;
+text-align:center;
+z-index:20;
+}
+
+.controlBtn{
+width:80px;
+height:80px;
+border:none;
+margin:10px;
+font-size:35px;
+border-radius:50%;
+background:gold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<div id="title">🔥 PRO MAKER POLICE CHASE 🔥</div>
+
+<div id="score">Score: 0</div>
+
+<div id="road">
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+</div>
+
+<div id="police"></div>
+<div id="thief"></div>
+
+<div class="obstacle" id="obstacle">🚌</div>
+
+<div id="gameOver">
+<h2>GAME OVER</h2>
+<p>Police Caught the Thief!</p>
+<br>
+<button id="restart" onclick="restartGame()">
+Restart Game
+</button>
+</div>
+
+<div id="controls">
+<button class="controlBtn" onclick="jump()">⬆️</button>
+</div>
+
+</div>
+
+<script>
+
+const thief = document.getElementById("thief");
+const obstacle = document.getElementById("obstacle");
+const scoreText = document.getElementById("score");
+const gameOver = document.getElementById("gameOver");
+
+let jumping = false;
+let score = 0;
+let gameRunning = true;
+
+const obstacles = ["🚌","🚗","🚕","🚚"];
+
+setInterval(()=>{
+let randomObstacle =
+obstacles[Math.floor(Math.random()*obstacles.length)];
+
+obstacle.innerHTML = randomObstacle;
+},2500);
+
+function jump(){
+
+if(jumping) return;
+
+jumping = true;
+
+let up = 0;
+
+let jumpUp = setInterval(()=>{
+
+if(up >= 200){
+
+clearInterval(jumpUp);
+
+let down = setInterval(()=>{
+
+if(up <= 0){
+clearInterval(down);
+jumping = false;
+}
+
+up -= 7;
+
+thief.style.bottom =
+130 + up + "px";
+
+},20);
+
+}
+
+up += 7;
+
+thief.style.bottom =
+130 + up + "px";
+
+},20);
+
+}
+
+// Keyboard Control
+
+document.addEventListener("keydown",function(e){
+
+if(e.code === "Space" || e.code === "ArrowUp"){
+jump();
+}
+
+});
+
+// Score
+
+let scoreInterval = setInterval(()=>{
+
+if(gameRunning){
+score++;
+scoreText.innerHTML = "Score: " + score;
+}
+
+},100);
+
+// Collision Detection
+
+let collision = setInterval(()=>{
+
+let thiefBottom = parseInt(
+window.getComputedStyle(thief)
+.getPropertyValue("bottom")
+);
+
+let obstacleRight = parseInt(
+window.getComputedStyle(obstacle)
+.getPropertyValue("right")
+);
+
+if(
+obstacleRight > window.innerWidth-240 &&
+obstacleRight < window.innerWidth-120 &&
+thiefBottom < 220
+){
+
+gameRunning = false;
+
+obstacle.style.animation = "none";
+
+gameOver.style.display = "block";
+
+clearInterval(scoreInterval);
+
+}
+
+},10);
+
+function restartGame(){
+location.reload();
+}
+
+</script>
+
+</body>
+  </html>
